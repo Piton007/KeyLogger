@@ -1,5 +1,6 @@
 import requests,json,socket
 
+#Obtener info de la red publica
 def get_net_info():
     user_info = socket.gethostname()
     try:

